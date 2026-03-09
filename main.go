@@ -16,7 +16,6 @@ func main() {
 		fmt.Println("Ошибка загрузки .env файла")
 		return
 	}
-
 	db, err := database.Connect()
 	if err != nil {
 		fmt.Println(err)
@@ -45,6 +44,10 @@ func main() {
 	{
 		movies.POST("/:id/reviews", h.CreateReview)
 		movies.GET("/:id/reviews", h.GetMovieReviews)
+		movies.GET("/:id", h.GetMovieById)
+		movies.POST("", h.CreateMovie)
+		movies.PATCH("/:id", h.UpdateMovie)
+		movies.DELETE("/:id", h.RemoveMovie)
 	}
 
 	genres := r.Group("/genres")

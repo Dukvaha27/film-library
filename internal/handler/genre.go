@@ -136,8 +136,22 @@ func (h *Handler) DeleteGenre(c *gin.Context) {
 		return
 	}
 
-	if err := h.db.Delete(&genre).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete genre"})
+	err = h.db.Transaction(func(tx *gorm.DB) error {
+		if err := h.db.
+			Where("genre_id = ?", genre.ID).
+			Delete(&models.Movie{}).Error; err != nil {
+			return err
+		}
+
+		if err := h.db.Delete(&genre).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

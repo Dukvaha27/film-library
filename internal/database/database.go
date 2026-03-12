@@ -30,10 +30,10 @@ func Connect() (*gorm.DB, error) {
 func Migrate(db *gorm.DB) error {
 	err := db.AutoMigrate(
 		&models.User{},
+		&models.Genre{},
 		&models.Movie{},
 		&models.Watchlist{},
 		&models.Review{},
-		&models.Genre{},
 	)
 	if err != nil {
 		return fmt.Errorf("ошибка при миграции таблиц: %w", err)
